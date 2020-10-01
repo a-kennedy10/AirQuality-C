@@ -13,6 +13,10 @@
 		620C4FCE2385DBF9001500FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 620C4FCC2385DBF9001500FE /* LaunchScreen.storyboard */; };
 		620C4FD12385DBF9001500FE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 620C4FD02385DBF9001500FE /* main.m */; };
 		7EDFB30B24B6A8DB00B08E8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7EDFB30A24B6A8DB00B08E8C /* Main.storyboard */; };
+		FA01D26A252514A000D13CF2 /* DVMAirQuality.m in Sources */ = {isa = PBXBuildFile; fileRef = FA01D269252514A000D13CF2 /* DVMAirQuality.m */; };
+		FA01D26D252514B300D13CF2 /* DVMPollution.m in Sources */ = {isa = PBXBuildFile; fileRef = FA01D26C252514B300D13CF2 /* DVMPollution.m */; };
+		FA01D270252514C200D13CF2 /* DVMWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = FA01D26F252514C200D13CF2 /* DVMWeather.m */; };
+		FA01D2772525358300D13CF2 /* DVMCityAirQualityController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA01D2762525358300D13CF2 /* DVMCityAirQualityController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,14 @@
 		620C4FCF2385DBF9001500FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		620C4FD02385DBF9001500FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7EDFB30A24B6A8DB00B08E8C /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		FA01D268252514A000D13CF2 /* DVMAirQuality.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVMAirQuality.h; sourceTree = "<group>"; };
+		FA01D269252514A000D13CF2 /* DVMAirQuality.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DVMAirQuality.m; sourceTree = "<group>"; };
+		FA01D26B252514B300D13CF2 /* DVMPollution.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVMPollution.h; sourceTree = "<group>"; };
+		FA01D26C252514B300D13CF2 /* DVMPollution.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DVMPollution.m; sourceTree = "<group>"; };
+		FA01D26E252514C200D13CF2 /* DVMWeather.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVMWeather.h; sourceTree = "<group>"; };
+		FA01D26F252514C200D13CF2 /* DVMWeather.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DVMWeather.m; sourceTree = "<group>"; };
+		FA01D2752525358300D13CF2 /* DVMCityAirQualityController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVMCityAirQualityController.h; sourceTree = "<group>"; };
+		FA01D2762525358300D13CF2 /* DVMCityAirQualityController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DVMCityAirQualityController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +70,8 @@
 		620C4FBD2385DBF6001500FE /* AirQuality ObjC */ = {
 			isa = PBXGroup;
 			children = (
+				FA01D2742525356200D13CF2 /* ModelControllers */,
+				FA01D2672525140200D13CF2 /* Models */,
 				7EDFB30924B6A8C700B08E8C /* Views */,
 				620C4FD72385DDA8001500FE /* Resources */,
 			);
@@ -85,6 +99,52 @@
 				7EDFB30A24B6A8DB00B08E8C /* Main.storyboard */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		FA01D2672525140200D13CF2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FA01D273252514E400D13CF2 /* Weather */,
+				FA01D272252514D800D13CF2 /* Pollution */,
+				FA01D271252514CB00D13CF2 /* AirQuality */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FA01D271252514CB00D13CF2 /* AirQuality */ = {
+			isa = PBXGroup;
+			children = (
+				FA01D268252514A000D13CF2 /* DVMAirQuality.h */,
+				FA01D269252514A000D13CF2 /* DVMAirQuality.m */,
+			);
+			path = AirQuality;
+			sourceTree = "<group>";
+		};
+		FA01D272252514D800D13CF2 /* Pollution */ = {
+			isa = PBXGroup;
+			children = (
+				FA01D26B252514B300D13CF2 /* DVMPollution.h */,
+				FA01D26C252514B300D13CF2 /* DVMPollution.m */,
+			);
+			path = Pollution;
+			sourceTree = "<group>";
+		};
+		FA01D273252514E400D13CF2 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				FA01D26E252514C200D13CF2 /* DVMWeather.h */,
+				FA01D26F252514C200D13CF2 /* DVMWeather.m */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		FA01D2742525356200D13CF2 /* ModelControllers */ = {
+			isa = PBXGroup;
+			children = (
+				FA01D2752525358300D13CF2 /* DVMCityAirQualityController.h */,
+				FA01D2762525358300D13CF2 /* DVMCityAirQualityController.m */,
+			);
+			path = ModelControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,6 +221,10 @@
 			files = (
 				620C4FC02385DBF6001500FE /* AppDelegate.m in Sources */,
 				620C4FD12385DBF9001500FE /* main.m in Sources */,
+				FA01D26A252514A000D13CF2 /* DVMAirQuality.m in Sources */,
+				FA01D26D252514B300D13CF2 /* DVMPollution.m in Sources */,
+				FA01D270252514C200D13CF2 /* DVMWeather.m in Sources */,
+				FA01D2772525358300D13CF2 /* DVMCityAirQualityController.m in Sources */,
 				620C4FC32385DBF6001500FE /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
