@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 @class DVMAirQuality;
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface DVMCityAirQualityController : NSObject
 
 +(void)fetchSupportedCountries:(void (^) (NSArray<NSString *> *, NSError *))completion;
@@ -26,8 +24,5 @@ NS_ASSUME_NONNULL_BEGIN
              completion:(NSString *)city
              completion:(void (^) (DVMAirQuality *_Nullable))completion;
 
-
-
 @end
 
-NS_ASSUME_NONNULL_END

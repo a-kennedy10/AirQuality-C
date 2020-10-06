@@ -63,7 +63,7 @@ static NSString *const apikey = @"38665520-a636-48a0-a132-5bc4293e3709";
                 NSString *country = [[NSString alloc] initWithString:countryDictionary[@"country"]];
                 [countries addObject:country];
             }
-            completion(countries);
+            completion(countries, nil);
         }
     }]resume];
 }
@@ -111,7 +111,7 @@ static NSString *const apikey = @"38665520-a636-48a0-a132-5bc4293e3709";
                 NSString *state = stateDictionary[@"state"];
                 [states addObject:state];
             }
-            completion(states);
+            completion(states, nil);
         }
     }] resume];
 }
@@ -160,7 +160,7 @@ static NSString *const apikey = @"38665520-a636-48a0-a132-5bc4293e3709";
                 NSString *city = cityDictionary[@"city"];
                 [cities addObject:city];
             }
-            completion(cities);
+            completion(cities, nil);
         }
     }]resume];
 }
@@ -208,7 +208,7 @@ static NSString *const apikey = @"38665520-a636-48a0-a132-5bc4293e3709";
         NSDictionary *dataDictionary = topLevelDictionary[@"data"];
         
         DVMAirQuality *cityAQI = [[DVMAirQuality alloc] initWithDictionary:dataDictionary];
-        completion(cityAQI);
+        completion(cityAQI, nil);
         
         }
     }]resume];
