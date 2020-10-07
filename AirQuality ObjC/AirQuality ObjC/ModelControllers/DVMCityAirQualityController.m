@@ -2,81 +2,82 @@
 //  DVMCityAirQualityController.m
 //  AirQuality ObjC
 //
-//  Created by RYAN GREENBURG on 11/21/19.
-//  Copyright © 2019 RYAN GREENBURG. All rights reserved.
+//  Created by Alex Kennedy on 9/30/20.
+//  Copyright © 2020 RYAN GREENBURG. All rights reserved.
 //
+// URL: https://api.airvisual.com/
 
-#import "DVMCityAirQuality.h"
 #import "DVMCityAirQualityController.h"
+#import "DVMAirQuality.h"
 
 static NSString *const baseURLString = @"https://api.airvisual.com/";
-static NSString *const version = @"v2";
+static NSString *const versionComponent = @"v2";
 static NSString *const countryComponent = @"countries";
-static NSString *const stateComponenet = @"states";
+static NSString *const stateComponent = @"states";
 static NSString *const cityComponent = @"cities";
 static NSString *const cityDetailsComponent = @"city";
-static NSString *const apiKey = @"2d50afec-b190-497d-9fbf-647cb91462b0";
+static NSString *const apikey = @"38665520-a636-48a0-a132-5bc4293e3709";
 
 @implementation DVMCityAirQualityController
 
-+ (void)fetchSupportedCountries:(void (^)(NSArray<NSString *> * _Nullable))completion
++(void)fetchSupportedCountries:(void (^)(NSArray<NSString *> * _Nonnull, NSError * _Nonnull))completion
 {
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
-    NSURL *versionURL = [baseURL URLByAppendingPathComponent:version];
+    NSURL *versionURL = [baseURL URLByAppendingPathComponent:versionComponent];
     NSURL *countryURL = [versionURL URLByAppendingPathComponent:countryComponent];
     
+    
     NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray new];
-    
-    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apiKey];
-    
+    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apikey];
     [queryItems addObject:apiKeyQuery];
     
+    
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithURL:countryURL resolvingAgainstBaseURL:true];
-    
     [urlComponents setQueryItems:queryItems];
-    
     NSURL *finalURL = [urlComponents URL];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:finalURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
         if (error)
         {
-            NSLog(@"There was an error in %s: %@, %@", __PRETTY_FUNCTION__, error, [error localizedDescription]);
-            completion(nil);
+            NSLog(@"%@", error.localizedDescription);
+            completion(nil, error);
             return;
         }
         
-        if (response)
+        if(!data)
         {
-            NSLog(@"%@", response);
+            NSLog(@"Error, no data returned from task");
+            completion(nil, error);
+            return;
         }
         
         if (data)
         {
-            NSDictionary *topLevel = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            NSDictionary *dataDict = topLevel[@"data"];
+            NSDictionary *topLevelDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            NSDictionary *dataDictionary = topLevelDictionary[@"data"];
+            
             NSMutableArray *countries = [NSMutableArray new];
-            for (NSDictionary *countryDict in dataDict)
+            for (NSDictionary *countryDictionary in dataDictionary)
             {
-                NSString *country = [[NSString alloc] initWithString:countryDict[@"country"]];
+                NSString *country = [[NSString alloc] initWithString:countryDictionary[@"country"]];
                 [countries addObject:country];
             }
-            completion(countries);
+            completion(countries, nil);
         }
-    }] resume];
+    }]resume];
 }
 
-+ (void)fetchSupportedStatesInCountry:(NSString *)country completion:(void (^)(NSArray<NSString *> * _Nullable))completion
++(void)fetchSupportedStatesInCountry:(NSString *)country completion:(void (^)(NSArray<NSString *> * _Nonnull, NSError * _Nonnull))completion
 {
-    
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
-    NSURL *versionURL = [baseURL URLByAppendingPathComponent:version];
-    NSURL *statesURL = [versionURL URLByAppendingPathComponent:stateComponenet];
+    NSURL *versionURL = [baseURL URLByAppendingPathComponent:versionComponent];
+    NSURL *statesURL = [versionURL URLByAppendingPathComponent:stateComponent];
     
     NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray new];
     
     NSURLQueryItem *countryQuery = [[NSURLQueryItem alloc] initWithName:@"country" value:country];
-    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apiKey];
+    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apikey];
     
     [queryItems addObject:countryQuery];
     [queryItems addObject:apiKeyQuery];
@@ -88,46 +89,44 @@ static NSString *const apiKey = @"2d50afec-b190-497d-9fbf-647cb91462b0";
     NSURL *finalURL = [urlComponents URL];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:finalURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
         if (error)
         {
-            NSLog(@"There was an error in %s: %@, %@", __PRETTY_FUNCTION__, error, [error localizedDescription]);
-            completion(nil);
+            NSLog(@"%@", error, [error localizedDescription]);
+            completion(nil, error);
             return;
         }
         
-        if (response)
+        if (!data)
         {
-            NSLog(@"%@", response);
+            NSLog(@"%@", error);
         }
         
         if (data)
         {
-            NSDictionary *topLevel = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            NSDictionary *dataDict = topLevel[@"data"];
+            NSDictionary *topLevelDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            NSDictionary *dataDictionary = topLevelDictionary[@"data"];
             NSMutableArray *states = [NSMutableArray new];
-            for (NSDictionary *stateDict in dataDict)
+            for (NSDictionary *stateDictionary in dataDictionary)
             {
-                NSString *state = stateDict[@"state"];
+                NSString *state = stateDictionary[@"state"];
                 [states addObject:state];
             }
-            completion(states);
+            completion(states, nil);
         }
     }] resume];
 }
 
-+ (void)fetchSupportedCitiesInState:(NSString *)state country:(NSString *)country completion:(void (^)(NSArray<NSString *> * _Nullable))completion
++(void)fetchSupportedCitiesInState:(NSString *)country completion:(NSString *)state completion:(void (^)(NSArray<NSString *> * _Nonnull, NSError * _Nonnull))completion
 {
-    
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
-    NSURL *versionURL = [baseURL URLByAppendingPathComponent:version];
+    NSURL *versionURL = [baseURL URLByAppendingPathComponent:versionComponent];
     NSURL *citiesURL = [versionURL URLByAppendingPathComponent:cityComponent];
     
     NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray new];
     
     NSURLQueryItem *stateQuery = [[NSURLQueryItem alloc] initWithName:@"state" value:state];
     NSURLQueryItem *countryQuery = [[NSURLQueryItem alloc] initWithName:@"country" value:country];
-    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apiKey];
+    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apikey];
     
     [queryItems addObject:stateQuery];
     [queryItems addObject:countryQuery];
@@ -136,51 +135,48 @@ static NSString *const apiKey = @"2d50afec-b190-497d-9fbf-647cb91462b0";
     NSURLComponents *urlComponents = [[NSURLComponents alloc] initWithURL:citiesURL resolvingAgainstBaseURL:true];
     
     [urlComponents setQueryItems:queryItems];
-    
     NSURL *finalURL = [urlComponents URL];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:finalURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        
         if (error)
         {
-            NSLog(@"There was an error in %s: %@, %@", __PRETTY_FUNCTION__, error, [error localizedDescription]);
-            completion(nil);
+            NSLog(@"%@", error, [error localizedDescription]);
+            completion(nil, error);
             return;
         }
         
-        if (response)
+        if (!data)
         {
-            NSLog(@"%@", response);
+            NSLog(@"%@", error);
         }
         
         if (data)
         {
-            NSDictionary *topLevel = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            NSDictionary *dataDict = topLevel[@"data"];
+            NSDictionary *topLevelDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+            NSDictionary *dataDictionary = topLevelDictionary[@"data"];
             NSMutableArray *cities = [NSMutableArray new];
-            for (NSDictionary *cityDict in dataDict)
+            for (NSDictionary *cityDictionary in dataDictionary)
             {
-                NSString *city = cityDict[@"city"];
+                NSString *city = cityDictionary[@"city"];
                 [cities addObject:city];
             }
-            completion(cities);
+            completion(cities, nil);
         }
-    }] resume];
+    }]resume];
 }
 
-+ (void)fetchDataForCity:(NSString *)city state:(NSString *)state country:(NSString *)country completion:(void (^)(DVMCityAirQuality * _Nullable))completion
++(void)fetchDataForCity:(NSString *)country completion:(NSString *)state completion:(NSString *)city completion:(void (^)(NSArray<DVMAirQuality *> * _Nonnull, NSError * _Nonnull))completion
 {
-    
     NSURL *baseURL = [NSURL URLWithString:baseURLString];
-    NSURL *versionURL = [baseURL URLByAppendingPathComponent:version];
-    NSURL *cityURL = [versionURL URLByAppendingPathComponent:cityDetailsComponent];
+    NSURL *versionURL = [baseURL URLByAppendingPathComponent:versionComponent];
+    NSURL *cityURL = [versionURL URLByAppendingPathComponent:cityComponent];
     
     NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray new];
     
     NSURLQueryItem *cityQuery = [[NSURLQueryItem alloc] initWithName:@"city" value:city];
     NSURLQueryItem *stateQuery = [[NSURLQueryItem alloc] initWithName:@"state" value:state];
     NSURLQueryItem *countryQuery = [[NSURLQueryItem alloc] initWithName:@"country" value:country];
-    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apiKey];
+    NSURLQueryItem *apiKeyQuery = [[NSURLQueryItem alloc] initWithName:@"key" value:apikey];
     
     [queryItems addObject:cityQuery];
     [queryItems addObject:stateQuery];
@@ -194,28 +190,29 @@ static NSString *const apiKey = @"2d50afec-b190-497d-9fbf-647cb91462b0";
     NSURL *finalURL = [urlComponents URL];
     
     [[[NSURLSession sharedSession] dataTaskWithURL:finalURL completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    if (error)
+    {
+        NSLog(@"%@", error, [error localizedDescription]);
+        completion(nil, error);
+        return;
+    }
+    
+    if (!data)
+    {
+        NSLog(@"%@", error);
+    }
+    
+    if (data)
+    {
+        NSDictionary *topLevelDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+        NSDictionary *dataDictionary = topLevelDictionary[@"data"];
         
-        if (error)
-        {
-            NSLog(@"There was an error in %s: %@, %@", __PRETTY_FUNCTION__, error, [error localizedDescription]);
-            completion(nil);
-            return;
-        }
+        DVMAirQuality *cityAQI = [[DVMAirQuality alloc] initWithDictionary:dataDictionary];
+        completion(cityAQI, nil);
         
-        if (response)
-        {
-            NSLog(@"%@", response);
         }
-        
-        if (data)
-        {
-            NSDictionary *topLevel = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-            NSDictionary *dataDict = topLevel[@"data"];
-            
-            DVMCityAirQuality *cityAQI = [[DVMCityAirQuality alloc] initWithDictionary:dataDict];
-            completion(cityAQI);
-        }
-    }] resume];
+    }]resume];
 }
-
+    
+    
 @end

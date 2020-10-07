@@ -2,19 +2,20 @@
 //  DVMPollution.h
 //  AirQuality ObjC
 //
-//  Created by RYAN GREENBURG on 11/20/19.
-//  Copyright © 2019 RYAN GREENBURG. All rights reserved.
+//  Created by Alex Kennedy on 9/30/20.
+//  Copyright © 2020 RYAN GREENBURG. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
+
 
 @interface DVMPollution : NSObject
 
 @property (nonatomic, readonly) NSInteger airQualityIndex;
 
--(instancetype)initWithInt:(NSInteger) aqi;
+-(instancetype)initWithAirQualityIndex:(NSInteger)airQualityIndex;
+
 
 @end
 
@@ -24,4 +25,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END
+
